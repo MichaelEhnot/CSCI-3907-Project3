@@ -32,7 +32,7 @@ def computeH(s, d):
 
     # make bottom right value = 1
     H = H / H[2][2]
-
+    print(H)
     return H
 
 def warpImage(im, H):
@@ -42,7 +42,7 @@ def warpImage(im, H):
 
 # read in the image
 im1 = plt.imread('PTZImages/image1.jpeg')
-im2 = plt.imread('PTZImages/image2.jpeg')
+im2 = plt.imread('PTZImages/image8.jpeg')
 
 # select the points
 plt.imshow(im1)
@@ -52,7 +52,7 @@ im2_pts = plt.ginput(5)
 
 H = computeH(im1_pts, im2_pts)
 
-imwarped = warpImage(im2, H)
+imwarped = warpImage(im1, H)
 
 plt.imshow(im1)
 plt.show()
