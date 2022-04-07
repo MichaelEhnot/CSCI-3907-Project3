@@ -59,3 +59,19 @@ plt.show()
 
 plt.imshow(imwarped)
 plt.show()
+
+# make mosaic
+im1_dim = im1.shape
+warped_dim = imwarped.shape
+
+combined_image = np.zeros(((im1_dim[0]+warped_dim[0]), (im1_dim[1]+warped_dim[1]), 3))
+print(combined_image.shape)
+for x in range(combined_image.shape[0]):
+    for y in range(combined_image.shape[1]):
+        if x < im1.shape[0] and y < im1.shape[1] and not np.all(im1[x][y]):
+            combined_image[x][y] = im1[x][y]
+        elif x < imwarped.shape[0] and y < imwarped.shape[1] and not np.all(imwarped[x][y]):
+            combined_image[x][y] = imwarped[x][y]
+
+plt.imshow(combined_image)
+plt.show()
