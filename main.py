@@ -52,12 +52,12 @@ def pad(img, h, w):
     return np.copy(np.pad(img, ((top_pad, bottom_pad), (left_pad, right_pad), (0, 0)), mode='constant', constant_values=0))
 
 # read in the image
-im1 = plt.imread('PTZImages/image7.jpeg')
-im2 = plt.imread('PTZImages/image8.jpeg')
+im1 = plt.imread('MyImages/metro.jpg')
+im2 = plt.imread('MyImages/whole.jpg')
 
 
-im1 = pad(im1, 500, 1000)
-im2 = pad(im2, 500, 1000)
+#im1 = pad(im1, 500, 1000)
+#im2 = pad(im2, 500, 1000)
 
 
 # select the points
@@ -82,7 +82,7 @@ im2_m = Image.open('tmp_im2.jpg')
 imwarped_m = Image.open('tmp_imwarped.jpg')
 
 
-combined_image = Image.blend(im2_m, imwarped_m, 0.5)
+combined_image = Image.blend(im2_m, imwarped_m, .5)
 
 plt.imshow(combined_image)
 plt.show()
