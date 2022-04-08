@@ -1,6 +1,8 @@
+from pickletools import uint8
 from skimage import io, transform
 from matplotlib import pyplot as plt
 import numpy as np
+from PIL import Image
 
 def computeH(s, d):
     # 5 points
@@ -40,9 +42,23 @@ def warpImage(im, H):
     tform_im = transform.warp(im, tform.inverse)
     return tform_im
 
+# padding method taken from https://ai-pool.com/d/padding-images-with-numpy
+def pad(img, h, w):
+    #  in case when you have odd number
+    top_pad = np.floor((h - img.shape[0]) / 2).astype(np.uint16)
+    bottom_pad = np.ceil((h - img.shape[0]) / 2).astype(np.uint16)
+    right_pad = np.ceil((w - img.shape[1]) / 2).astype(np.uint16)
+    left_pad = np.floor((w - img.shape[1]) / 2).astype(np.uint16)
+    return np.copy(np.pad(img, ((top_pad, bottom_pad), (left_pad, right_pad), (0, 0)), mode='constant', constant_values=0))
+
 # read in the image
-im1 = plt.imread('PTZImages/image1.jpeg')
-im2 = plt.imread('PTZImages/image8.jpeg')
+im1 = plt.imread('MyImages/left.jpg')
+im2 = plt.imread('MyImages/right.jpg')
+
+
+im1 = pad(im1, 20, 100)
+im2 = pad(im2, 20, 100)
+
 
 # select the points
 plt.imshow(im1)
@@ -54,24 +70,21 @@ H = computeH(im1_pts, im2_pts)
 
 imwarped = warpImage(im1, H)
 
-plt.imshow(im1)
-plt.show()
-
 plt.imshow(imwarped)
 plt.show()
 
-# make mosaic
-im1_dim = im1.shape
-warped_dim = imwarped.shape
 
-combined_image = np.zeros(((im1_dim[0]+warped_dim[0]), (im1_dim[1]+warped_dim[1]), 3))
-print(combined_image.shape)
-for x in range(combined_image.shape[0]):
-    for y in range(combined_image.shape[1]):
-        if x < im1.shape[0] and y < im1.shape[1] and not np.all(im1[x][y]):
-            combined_image[x][y] = im1[x][y]
-        elif x < imwarped.shape[0] and y < imwarped.shape[1] and not np.all(imwarped[x][y]):
-            combined_image[x][y] = imwarped[x][y]
+io.imsave("tmp_imwarped.jpg", imwarped)
+io.imsave("tmp_im2.jpg", im2)
+
+
+im2_m = Image.open('tmp_im2.jpg')
+imwarped_m = Image.open('tmp_imwarped.jpg')
+
+
+combined_image = Image.blend(im2_m, imwarped_m, 0.5)
 
 plt.imshow(combined_image)
 plt.show()
+
+io.imsave("result.jpg", combined_image)
