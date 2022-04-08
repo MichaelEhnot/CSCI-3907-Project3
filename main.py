@@ -52,12 +52,12 @@ def pad(img, h, w):
     return np.copy(np.pad(img, ((top_pad, bottom_pad), (left_pad, right_pad), (0, 0)), mode='constant', constant_values=0))
 
 # read in the image
-im1 = plt.imread('MyImages/left.jpg')
-im2 = plt.imread('MyImages/right.jpg')
+im1 = plt.imread('PTZImages/image7.jpeg')
+im2 = plt.imread('PTZImages/image8.jpeg')
 
 
-im1 = pad(im1, 20, 100)
-im2 = pad(im2, 20, 100)
+im1 = pad(im1, 500, 1000)
+im2 = pad(im2, 500, 1000)
 
 
 # select the points
@@ -87,4 +87,4 @@ combined_image = Image.blend(im2_m, imwarped_m, 0.5)
 plt.imshow(combined_image)
 plt.show()
 
-io.imsave("result.jpg", combined_image)
+combined_image.save("result.jpg")
